@@ -97,13 +97,13 @@ RUN yum repolist && yum install lapack gcc-gfortran -y && \
         make PREFIX=/usr/local install
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 
-
 RUN pip3 install cmake==3.23.3
 # Upgrade gcc
-RUN yum remove -y gcc* && \
-    yum install -y gcc10* && \
-    ln -s `which gcc10-gcc` /usr/local/bin/gcc && \
-    ln -s `which gcc10-g++` /usr/local/bin/g++
+RUN yum install -y gcc10* && \
+    mv -v /usr/bin/gcc /usr/bin/gcc7-gcc && \
+    mv -v /usr/bin/g++ /usr/bin/gcc7-g++ && \
+    update-alternatives --install /usr/bin/gcc gcc $(which gcc10-gcc) 1 && \
+    update-alternatives --install /usr/bin/g++ g++ $(which gcc10-g++) 1
 ENV FC=gcc10-gfortran
 
 # Change User
