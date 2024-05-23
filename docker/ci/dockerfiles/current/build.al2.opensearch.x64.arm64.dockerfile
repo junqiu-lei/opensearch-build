@@ -90,17 +90,21 @@ RUN ln -sfn /usr/local/bin/python3.9 /usr/bin/python3 && \
     pip3 install pip==23.1.2 && pip3 install pipenv==2023.6.12 awscli==1.32.17
 
 # Add k-NN Library dependencies
-#RUN yum repolist && yum install openblas-static lapack gcc-gfortran -y
-RUN git clone https://github.com/xianyi/OpenBLAS.git && \
-    cd OpenBLAS && \
-    make TARGET=ARMV8 USE_OPENMP=1 FC=gfortran && \
-    make PREFIX=/usr/local install && \
-    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+RUN yum repolist && yum install lapack gcc-gfortran -y && \
+        git clone -b v0.3.3 --single-branch https://github.com/xianyi/OpenBLAS.git && \
+        cd OpenBLAS && \
+        make USE_OPENMP=1 FC=gfortran && \
+        make PREFIX=/usr/local install
+ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
+
+
 RUN pip3 install cmake==3.23.3
 # Upgrade gcc
-RUN yum install -y gcc10* && \
+RUN yum remove -y gcc* && \
+    yum install -y gcc10* && \
     ln -s `which gcc10-gcc` /usr/local/bin/gcc && \
     ln -s `which gcc10-g++` /usr/local/bin/g++
+ENV FC=gcc10-gfortran
 
 # Change User
 USER $CONTAINER_USER
