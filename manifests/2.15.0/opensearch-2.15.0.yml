@@ -13,7 +13,7 @@ components:
     ref: 2.x
   - name: k-NN
     repository: https://github.com/junqiu-lei/k-NN.git
-    ref: ignore-jni-test-arm64-2.x
+    ref: knn-build
     platforms:
       - linux
       - windows
