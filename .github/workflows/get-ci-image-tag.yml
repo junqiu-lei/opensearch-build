@@ -39,7 +39,7 @@ jobs:
       - name: Checkout opensearch-build repository
         uses: actions/checkout@v3
         with:
-          repository: 'opensearch-project/opensearch-build'
+          repository: 'junqiu-lei/opensearch-build'
           ref: ${{ inputs.build_ref }}
           path: 'opensearch-build'
       - name: Get ci image version from opensearch-build repository scripts
@@ -50,7 +50,7 @@ jobs:
           TYPE=${{ inputs.type }}
           if [[ -z "$PLATFORM" ]]; then
               if [[ "$PRODUCT" = "opensearch" ]]; then
-                  PLATFORM="centos7" # Temp measure before al2 deprecation on opensearch for k-NN
+                  PLATFORM="al2" # Temp measure before al2 deprecation on opensearch for k-NN
               else
                   PLATFORM="almalinux8"
               fi
